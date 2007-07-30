@@ -140,13 +140,13 @@ public class QueryDialog extends BDialog {
    private void initInternal() {
        component.addComponentListener(new ComponentAdapter() {
            public void componentResized(ComponentEvent ev) {
-               if (lastSetSize == null || !lastSetSize.equals(component.getSize())) {
-                   lastSetSize = null;
+               if (lastSize == null || !lastSize.equals(component.getSize())) {
+                   lastSize = null;
                    layoutChildren();
                    QueryDialog.this.dispatchEvent(new WindowResizedEvent(QueryDialog.this));
                }
                else
-                   lastSetSize = null;
+                   lastSize = null;
            }
        });
        ((JDialog) component).setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
