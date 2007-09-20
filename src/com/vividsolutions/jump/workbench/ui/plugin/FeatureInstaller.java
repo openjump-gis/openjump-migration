@@ -45,10 +45,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -567,5 +563,15 @@ public class FeatureInstaller {
         }
         Assert.shouldNeverReachHere();
         return null;
+    }
+
+    public static JMenu addMainMenu(FeatureInstaller featureInstaller,
+      final String[] menuPath, String menuName, int index) {
+      JMenu menu = new JMenu(menuName);
+      JMenu parent = featureInstaller.createMenusIfNecessary(
+        featureInstaller.menuBarMenu(menuPath[0]),
+        featureInstaller.behead(menuPath));
+      parent.insert(menu, index);
+      return menu;
     }
 }

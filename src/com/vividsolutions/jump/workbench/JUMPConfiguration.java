@@ -89,8 +89,6 @@ public class JUMPConfiguration implements Setup {
 
     private InstallGridPlugIn installGridPlugIn = new InstallGridPlugIn();
 
-    private PersistentBlackboardPlugIn persistentBlackboardPlugIn = new PersistentBlackboardPlugIn();
-
     //FirstTaskFramePlugIn will be initialized using reflection in
     // #initializePlugIns [Jon Aquino]
     private FirstTaskFramePlugIn firstTaskFramePlugIn = new FirstTaskFramePlugIn();
@@ -147,7 +145,7 @@ public class JUMPConfiguration implements Setup {
     // private BeanShellPlugIn beanShellPlugIn = new BeanShellPlugIn();
 
 
-    private LoadDatasetPlugIn loadDatasetPlugIn = new LoadDatasetPlugIn();
+//    private LoadDatasetPlugIn loadDatasetPlugIn = new LoadDatasetPlugIn();
     //private LoadDatasetFromFilePlugIn loadDatasetFromFilePlugIn = new LoadDatasetFromFilePlugIn();
     private SaveDatasetAsPlugIn saveDatasetAsPlugIn = new SaveDatasetAsPlugIn();
     //private SaveDatasetAsFilePlugIn saveDatasetAsFilePlugIn = new SaveDatasetAsFilePlugIn();
@@ -281,6 +279,7 @@ public class JUMPConfiguration implements Setup {
         //add items to the toolbar will add them to the *end* of the toolbar.
         // [Jon Aquino]
         initializeBuiltInPlugIns(workbenchContext);
+        OpenJumpConfiguration.postExtensionInitialization(workbenchContext);
     }
 
     private void configureCategoryPopupMenu(WorkbenchContext workbenchContext,
@@ -289,11 +288,6 @@ public class JUMPConfiguration implements Setup {
                 .getFrame().getCategoryPopupMenu(), addNewLayerPlugIn,
                 addNewLayerPlugIn.getName(), false, null, null);  
 
-    	//[sstein 20.01.2006] added again after user request
-        featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
-                .getFrame().getCategoryPopupMenu(), loadDatasetPlugIn,
-                loadDatasetPlugIn.getName() + "...", false, LoadDatasetPlugIn.getIcon(),
-                LoadDatasetPlugIn.createEnableCheck(workbenchContext));
         //--
         /*featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
                 .getFrame().getCategoryPopupMenu(), loadDatasetFromFilePlugIn,
@@ -547,15 +541,6 @@ public class JUMPConfiguration implements Setup {
             final EnableCheckFactory checkFactory,
 		//-- FILE
             FeatureInstaller featureInstaller) throws Exception {
-        /*featureInstaller.addMainMenuItemWithJava14Fix(loadDatasetFromFilePlugIn, new String[] {MenuNames.FILE},
-                loadDatasetFromFilePlugIn.getName() + "...", false, null, AbstractLoadDatasetPlugIn
-                        .createEnableCheck(workbenchContext));
-        featureInstaller.addMainMenuItemWithJava14Fix(saveDatasetAsFilePlugIn, new String[] {MenuNames.FILE},
-                saveDatasetAsFilePlugIn.getName() + "...", false, null,
-                AbstractSaveDatasetAsPlugIn.createEnableCheck(workbenchContext));*/
-        featureInstaller.addMainMenuItemWithJava14Fix(loadDatasetPlugIn, new String[] {MenuNames.FILE},
-                loadDatasetPlugIn.getName() + "...", false, LoadDatasetPlugIn.getIcon(), LoadDatasetPlugIn
-                        .createEnableCheck(workbenchContext));        
         featureInstaller.addMainMenuItemWithJava14Fix(saveDatasetAsPlugIn, new String[] {MenuNames.FILE},
                 saveDatasetAsPlugIn.getName() + "...", false, SaveDatasetAsPlugIn.ICON,
                 SaveDatasetAsPlugIn.createEnableCheck(workbenchContext));  
@@ -1128,10 +1113,6 @@ public void configureDatastores(final WorkbenchContext context) throws Exception
         		newTaskPlugIn,
         		NewTaskPlugIn.createEnableCheck(workbenchContext),
 				workbenchContext);                
-        frame.getToolBar().addPlugIn(LoadDatasetPlugIn.getIcon(),
-        		loadDatasetPlugIn,
-        		LoadDatasetPlugIn.createEnableCheck(workbenchContext),
-				workbenchContext);        
         frame.getToolBar().addSeparator();        
         add(new ZoomTool(), workbenchContext);
         add(new PanTool(), workbenchContext);
