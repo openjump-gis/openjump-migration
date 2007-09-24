@@ -1,6 +1,31 @@
+/* *****************************************************************************
+ The Open Java Unified Mapping Platform (OpenJUMP) is an extensible, interactive
+ GUI for visualizing and manipulating spatial features with geometry and
+ attributes. 
+
+ Copyright (C) 2007  Revolution Systems Inc.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+ For more information see:
+ 
+ http://openjump.org/
+
+ ******************************************************************************/
 package org.openjump.core.ui.plugin.file;
 
-import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +39,9 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
+
+import org.openjump.core.ui.enablecheck.BooleanPropertyEnableCheck;
+import org.openjump.core.ui.plugin.ThreadedBasePlugIn;
 
 import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.coordsys.CoordinateSystemRegistry;
@@ -30,8 +58,8 @@ import com.vividsolutions.jump.workbench.model.Layerable;
 import com.vividsolutions.jump.workbench.model.Task;
 import com.vividsolutions.jump.workbench.plugin.MultiEnableCheck;
 import com.vividsolutions.jump.workbench.plugin.PlugInContext;
-import com.vividsolutions.jump.workbench.plugin.ThreadedBasePlugIn;
 import com.vividsolutions.jump.workbench.ui.GUIUtil;
+import com.vividsolutions.jump.workbench.ui.MenuNames;
 import com.vividsolutions.jump.workbench.ui.WorkbenchFrame;
 import com.vividsolutions.jump.workbench.ui.images.IconLoader;
 import com.vividsolutions.jump.workbench.ui.plugin.FeatureInstaller;
@@ -39,6 +67,8 @@ import com.vividsolutions.jump.workbench.ui.plugin.SaveProjectAsPlugIn;
 import com.vividsolutions.jump.workbench.ui.plugin.WorkbenchContextReference;
 
 public class OpenProjectPlugIn extends ThreadedBasePlugIn {
+  private static final String KEY = OpenProjectPlugIn.class.getName();
+
   private JFileChooser fileChooser;
 
   private Task newTask;
@@ -49,32 +79,28 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
 
   private File selectedFile;
 
-  private WorkbenchContext workbenchContext;
-
   public OpenProjectPlugIn() {
+    super(IconLoader.icon("Open.gif"));
   }
 
   public OpenProjectPlugIn(WorkbenchContext workbenchContext, File file) {
+    super(file.getName(), file.getAbsolutePath());
     this.workbenchContext = workbenchContext;
     this.file = file;
-  }
-
-  public String getName() {
-    return I18N.get("ui.plugin.OpenProjectPlugIn.open-project");
+    this.enableCheck = new BooleanPropertyEnableCheck(file, "exists", true,
+      "File does not exist: " + file.getAbsolutePath());
   }
 
   public void initialize(PlugInContext context) throws Exception {
-    this.workbenchContext = context.getWorkbenchContext();
+    super.initialize(context);
     FeatureInstaller featureInstaller = context.getFeatureInstaller();
 
-    String oldPluginName = I18N.get("ui.plugin.OpenProjectPlugIn.open-project")
-      + "...";
     Icon icon = getIcon();
-    MultiEnableCheck enableCheck = new MultiEnableCheck();
-//    WorkbenchUtil.replaceMenuItem(workbenchContext, MenuNames.FILE,
-//      oldPluginName, this, icon, enableCheck);
-//    WorkbenchUtil.moveMenuItemAfter(featureInstaller, MenuNames.FILE,
-//      oldPluginName, OpenFilePlugin.getMenuName());
+    String name = getName() + "...{pos:5}";
+    // Add File Menu
+    featureInstaller.addMainMenuItemWithJava14Fix(this, new String[] {
+      MenuNames.FILE
+    }, name, false, icon, new MultiEnableCheck());
   }
 
   private void initFileChooser() {
@@ -345,9 +371,4 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
       return newPrefix;
     }
   }
-
-  public Icon getIcon() {
-    return IconLoader.icon("Open.gif");
-  }
-
 }

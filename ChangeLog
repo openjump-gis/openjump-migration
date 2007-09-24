@@ -1,4 +1,16 @@
-2007-09-17 beckerl <becker.larry@gmail.com>
+2007-09-24 paul_d_austin <paul.austin@revolsys.com
+          * Added new abstract plugin/threaded plugins which have a name, icon
+            and tooltip under the openjump package. Also added methods to
+            FeatureInstaller to add these to menus.
+          * Added enable factory and listener classes which use introspection to 
+            invoke methods on objects, so you don't need to create an 
+            implementation class each time you just want to invoke a method from 
+            a button or menu on the plugin.
+          * Added ComponentFactory frameworks for Swing Components and editable
+            Swing Components (fields).
+          * Added the new Open File, Open Project and Open Recent menus.
+ 
+ 2007-09-17 beckerl <becker.larry@gmail.com>
           * Added mouse wheel zooming to the PanTool. 
             com.vividsolutions.jump.workbench.ui.zoom.PanTool.java
             com.vividsolutions.jump.workbench.ui.LayerViewPanel.java

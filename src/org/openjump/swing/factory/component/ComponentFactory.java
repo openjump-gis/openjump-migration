@@ -24,24 +24,46 @@
  http://openjump.org/
 
  ******************************************************************************/
-package org.openjump.swing.listener;
+package org.openjump.swing.factory.component;
 
-import java.util.EventObject;
+import java.awt.Component;
 
-public class ValueChangeEvent extends EventObject {
+import javax.swing.Icon;
 
-  private Object value;
-
-  public ValueChangeEvent(Object source, Object value) {
-    super(source);
-    this.value = value;
-  }
+/**
+ * The ComponentFactory is used to create instances of the {@link Component}
+ * type T.
+ * 
+ * @author Paul Austin
+ * @param The type of component created.
+ */
+public interface ComponentFactory<T extends Component> {
+  /**
+   * Create an instance of the component.
+   * 
+   * @return The new component instance.
+   */
+  T createComponent();
 
   /**
-   * @return the value
+   * Get the display name of the component. Used in the UI as a Frame or menu
+   * title.
+   * 
+   * @return The name.
    */
-  public Object getValue() {
-    return value;
-  }
+  String getName();
 
+  /**
+   * Get the icon for the component.
+   * 
+   * @return The icon.
+   */
+  Icon getIcon();
+
+  /**
+   * Get the tool-tip for the component.
+   * 
+   * @return The tool-tip.
+   */
+  String getToolTip();
 }

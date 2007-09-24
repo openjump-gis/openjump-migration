@@ -25,7 +25,7 @@ public class BooleanPropertyEnableCheck implements EnableCheck {
    */
   public BooleanPropertyEnableCheck(final Object object,
     final String checkMethodName) {
-    this(object, checkMethodName, true);
+    this(object, checkMethodName, true, "");
   }
 
   /**
@@ -34,12 +34,14 @@ public class BooleanPropertyEnableCheck implements EnableCheck {
    *          value.
    * @param expectedValue The expected value to be returned for the check to be
    *          enabled.
+   * @param disabledMessage 
    */
   public BooleanPropertyEnableCheck(final Object object,
-    final String checkMethodName, final boolean expectedValue) {
+    final String checkMethodName, final boolean expectedValue, String disabledMessage) {
     Class clazz = object.getClass();
     this.object = object;
     this.expectedValue = expectedValue;
+    this.disabledMessage = disabledMessage;
     try {
       method = clazz.getMethod(checkMethodName, new Class[] {});
     } catch (Throwable e) {

@@ -2,7 +2,6 @@ package org.openjump.core.ui.enablecheck;
 
 import java.lang.reflect.Method;
 
-import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;

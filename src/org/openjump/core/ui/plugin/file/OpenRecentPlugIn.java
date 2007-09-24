@@ -1,6 +1,31 @@
+/* *****************************************************************************
+ The Open Java Unified Mapping Platform (OpenJUMP) is an extensible, interactive
+ GUI for visualizing and manipulating spatial features with geometry and
+ attributes. 
+
+ Copyright (C) 2007  Revolution Systems Inc.
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+ For more information see:
+ 
+ http://openjump.org/
+
+ ******************************************************************************/
 package org.openjump.core.ui.plugin.file;
 
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -12,21 +37,17 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.event.MenuListener;
 
-import org.openjump.core.ui.enablecheck.BooleanPropertyMenuEnableListener;
+import org.openjump.core.ui.plugin.AbstractPlugIn;
 import org.openjump.swing.listener.InvokeMethodPropertyChangeListener;
 
-import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.util.Blackboard;
 import com.vividsolutions.jump.workbench.WorkbenchContext;
-import com.vividsolutions.jump.workbench.plugin.AbstractPlugIn;
 import com.vividsolutions.jump.workbench.plugin.PlugInContext;
 import com.vividsolutions.jump.workbench.ui.MenuNames;
 import com.vividsolutions.jump.workbench.ui.plugin.FeatureInstaller;
 import com.vividsolutions.jump.workbench.ui.plugin.PersistentBlackboardPlugIn;
-import com.vividsolutions.jump.workbench.ui.task.TaskMonitorManager;
 
 public class OpenRecentPlugIn extends AbstractPlugIn {
   private static final String KEY = OpenRecentPlugIn.class.getName();
@@ -60,24 +81,27 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
   /** The ordered set of recent projects. */
   private Set<String> recentProjects = new LinkedHashSet<String>();
 
-  private String name = I18N.get(KEY);
+  private FeatureInstaller featureInstaller;
 
+  private OpenRecentPlugIn() {
+  }
 
   public void initialize(PlugInContext context) throws Exception {
-    this.workbenchContext = context.getWorkbenchContext();
+    super.initialize(context);
+    featureInstaller = context.getFeatureInstaller();
     workbenchContext.getBlackboard().put(KEY, this);
     recentFiles = getFileNames(RECENT_FILES_KEY);
     recentProjects = getFileNames(RECENT_PROJECTS_KEY);
     FeatureInstaller featureInstaller = context.getFeatureInstaller();
     recentMenu = FeatureInstaller.addMainMenu(featureInstaller, new String[] {
       MenuNames.FILE
-    }, name, 0);
-    InvokeMethodPropertyChangeListener listener = new InvokeMethodPropertyChangeListener(this, "updateFileAndProjectMenu", new Object[] {recentMenu});
+    }, getName(), 0);
+    InvokeMethodPropertyChangeListener listener = new InvokeMethodPropertyChangeListener(
+      this, "updateFileAndProjectMenu", new Object[] {
+        recentMenu
+      });
     addPropertyChangeListener(listener);
     updateFileAndProjectMenu(recentMenu);
-  }
-
-  private OpenRecentPlugIn() {
   }
 
   public synchronized List<String> getRecentFiles() {
@@ -136,8 +160,6 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
     }
   }
 
-  private WorkbenchContext workbenchContext;
-
   private JMenu recentMenu;
 
   public boolean hasRecentItems() {
@@ -145,6 +167,10 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
   }
 
   public synchronized void updateFileAndProjectMenu(final JMenu recentMenu) {
+    String[] menuPath = new String[] {
+      MenuNames.FILE, getName()
+    };
+
     for (MenuListener listener : recentMenu.getMenuListeners()) {
       recentMenu.removeMenuListener(listener);
     }
@@ -155,8 +181,8 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
     Collections.reverse(files);
     for (String fileName : files) {
       File file = new File(fileName);
-      OpenFilePlugin openFilePlugin = new OpenFilePlugin(workbenchContext, file);
-      addRecentItem(recentMenu, file, openFilePlugin);
+      OpenFilePlugIn openFilePlugin = new OpenFilePlugIn(workbenchContext, file);
+      featureInstaller.addMainMenuItem(menuPath, openFilePlugin);
     }
     List<String> projects = getRecentProjects();
     if (!files.isEmpty() && !projects.isEmpty()) {
@@ -167,22 +193,19 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
       File file = new File(fileName);
       OpenProjectPlugIn openProjectPlugin = new OpenProjectPlugIn(
         workbenchContext, file);
-      addRecentItem(recentMenu, file, openProjectPlugin);
-
+      featureInstaller.addMainMenuItem(menuPath, openProjectPlugin);
     }
   }
 
-  private void addRecentItem(final JMenu recentMenu, File file,
-    AbstractPlugIn plugin) {
-    JMenuItem menuItem = new JMenuItem(file.getName());
-
-    String absolutePath = file.getAbsolutePath();
-    ActionListener openFileListener = toActionListener(plugin,
-      workbenchContext, new TaskMonitorManager());
-    menuItem.addActionListener(openFileListener);
-    recentMenu.addMenuListener(new BooleanPropertyMenuEnableListener(menuItem,
-      file, "exists", absolutePath, "File does not exist: " + absolutePath));
-
-    recentMenu.add(menuItem);
-  }
+  // private void addRecentItem(final JMenu recentMenu, File file,
+  // AbstractPlugIn plugin) {
+  // JMenuItem menuItem = new JMenuItem(file.getName());
+  //
+  // String absolutePath = file.getAbsolutePath();
+  // menuItem.addActionListener(this);
+  // recentMenu.addMenuListener(new BooleanPropertyEnableListener(menuItem,
+  // file, "exists", absolutePath, "File does not exist: " + absolutePath));
+  //
+  // recentMenu.add(menuItem);
+  // }
 }

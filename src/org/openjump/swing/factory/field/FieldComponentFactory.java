@@ -24,24 +24,18 @@
  http://openjump.org/
 
  ******************************************************************************/
-package org.openjump.swing.listener;
+package org.openjump.swing.factory.field;
 
-import java.util.EventObject;
+import javax.swing.JComponent;
 
-public class ValueChangeEvent extends EventObject {
+import org.openjump.swing.listener.ValueChangeListener;
 
-  private Object value;
+public interface FieldComponentFactory {
+  JComponent createComponent();
 
-  public ValueChangeEvent(Object source, Object value) {
-    super(source);
-    this.value = value;
-  }
+  JComponent createComponent(ValueChangeListener listener);
 
-  /**
-   * @return the value
-   */
-  public Object getValue() {
-    return value;
-  }
+  Object getValue(JComponent component);
 
+  void setValue(JComponent component, Object value);
 }

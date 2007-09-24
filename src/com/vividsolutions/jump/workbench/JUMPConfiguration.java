@@ -33,7 +33,6 @@ package com.vividsolutions.jump.workbench;
 
 import com.vividsolutions.jts.util.*;
 import org.openjump.OpenJumpConfiguration;
-import org.openjump.core.ui.plugin.file.OpenRecentProjectPlugIn;
 import org.openjump.core.ui.plugin.tools.ZoomRealtimeTool;
 
 import com.vividsolutions.jump.I18N;
@@ -48,7 +47,6 @@ import com.vividsolutions.jump.workbench.plugin.*;
 import com.vividsolutions.jump.workbench.ui.*;
 import com.vividsolutions.jump.workbench.ui.cursortool.*;
 import com.vividsolutions.jump.workbench.ui.cursortool.editing.*;
-import com.vividsolutions.jump.workbench.ui.images.IconLoader;
 import com.vividsolutions.jump.workbench.ui.plugin.*;
 import com.vividsolutions.jump.workbench.ui.plugin.analysis.*;
 import com.vividsolutions.jump.workbench.ui.plugin.clipboard.*;
@@ -155,8 +153,6 @@ public class JUMPConfiguration implements Setup {
 
     private NewTaskPlugIn newTaskPlugIn = new NewTaskPlugIn();
 
-    private OpenProjectPlugIn openProjectPlugIn = new OpenProjectPlugIn();
-
 
     private PasteItemsPlugIn pasteItemsPlugIn = new PasteItemsPlugIn();
 
@@ -241,10 +237,7 @@ public class JUMPConfiguration implements Setup {
     private ImageLayerManagerPlugIn imageLayerManagerPlugIn = new ImageLayerManagerPlugIn();
 
   	private RefreshDataStoreLayerPlugin refreshDataStoreLayerPlugin = new RefreshDataStoreLayerPlugin();
-  	
-  	private OpenRecentProjectPlugIn openRecentProject  = 
-  		new OpenRecentProjectPlugIn();  //LDB: must be defined here after PersistentBlackboardPlugIn
-  	
+  	  	
     public void setup(WorkbenchContext workbenchContext) throws Exception {
         configureStyles(workbenchContext);
         configureDatastores(workbenchContext);
@@ -547,10 +540,7 @@ public class JUMPConfiguration implements Setup {
         featureInstaller.addMenuSeparator(MenuNames.FILE); // ===================
         featureInstaller.addMainMenuItemWithJava14Fix(newTaskPlugIn, new String[] {MenuNames.FILE}, newTaskPlugIn
                 .getName()
-                + "...", false, NewTaskPlugIn.getIcon(), null);
-        featureInstaller.addMainMenuItemWithJava14Fix(openProjectPlugIn, new String[] {MenuNames.FILE},
-                openProjectPlugIn.getName() + "...", false, null,
-                new MultiEnableCheck());
+                + "...", false, newTaskPlugIn.getIcon(), null);
         featureInstaller.addMainMenuItemWithJava14Fix(saveProjectPlugIn, new String[] {MenuNames.FILE},
                 saveProjectPlugIn.getName(), false, null, checkFactory
                         .createTaskWindowMustBeActiveCheck());
@@ -1109,7 +1099,7 @@ public void configureDatastores(final WorkbenchContext context) throws Exception
     private void configureToolBar(final WorkbenchContext workbenchContext,
             EnableCheckFactory checkFactory) {    	
         WorkbenchFrame frame = workbenchContext.getWorkbench().getFrame();
-        frame.getToolBar().addPlugIn(NewTaskPlugIn.getIcon(),
+        frame.getToolBar().addPlugIn(newTaskPlugIn.getIcon(),
         		newTaskPlugIn,
         		NewTaskPlugIn.createEnableCheck(workbenchContext),
 				workbenchContext);                
@@ -1159,7 +1149,7 @@ public void configureDatastores(final WorkbenchContext context) throws Exception
         add(new QuasimodeTool(new SelectFeaturesTool()).add(
                 new QuasimodeTool.ModifierKeySpec(true, false, false), null),
                 workbenchContext);
-        frame.getToolBar().addPlugIn(ClearSelectionPlugIn.getIcon(),
+        frame.getToolBar().addPlugIn(clearSelectionPlugIn.getIcon(),
         		clearSelectionPlugIn,
 				clearSelectionPlugIn.createEnableCheck(workbenchContext),
 				workbenchContext);

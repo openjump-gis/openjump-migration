@@ -33,7 +33,8 @@ import org.openjump.core.ui.plugin.edittoolbox.DrawConstrainedLineStringPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.DrawConstrainedPolygonPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.RotateSelectedItemPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.SelectOneItemPlugIn;
-import org.openjump.core.ui.plugin.file.OpenFilePlugin;
+import org.openjump.core.ui.plugin.file.OpenFilePlugIn;
+import org.openjump.core.ui.plugin.file.OpenProjectPlugIn;
 import org.openjump.core.ui.plugin.file.OpenRecentPlugIn;
 import org.openjump.core.ui.plugin.file.SaveImageAsSVGPlugIn;
 import org.openjump.core.ui.plugin.layer.AddSIDLayerPlugIn;
@@ -67,6 +68,8 @@ import org.openjump.core.ui.plugin.wms.ZoomToWMSPlugIn;
 import org.openjump.core.ui.style.decoration.ArrowLineStringMiddlepointStyle;
 import org.openjump.core.ui.style.decoration.SegmentDownhillArrowStyle;
 import org.openjump.core.ui.style.decoration.VertexZValueStyle;
+import org.openjump.core.ui.swing.factory.field.FieldComponentFactoryRegistry;
+import org.openjump.core.ui.swing.factory.field.FileFieldComponentFactory;
 import org.openjump.sigle.plugin.geoprocessing.layers.SpatialJoinPlugIn;
 import org.openjump.sigle.plugin.geoprocessing.oneLayer.topology.PlanarGraphPlugIn;
 import org.openjump.sigle.plugin.joinTable.JoinTablePlugIn;
@@ -109,22 +112,31 @@ public class OpenJumpConfiguration {
       null, null, null);
 
 
-    PersistentBlackboardPlugIn persistentBlackboard = new PersistentBlackboardPlugIn();
-    persistentBlackboard.initialize(pluginContext);
 
     /*-----------------------------------------------
      *  add here first the field which holds the plugin
      *  and afterwards initialize it for the menu
      *-----------------------------------------------*/
+    PersistentBlackboardPlugIn persistentBlackboard = new PersistentBlackboardPlugIn();
+    persistentBlackboard.initialize(pluginContext);
 
-    /***************************************************************************
+    /* *************************************************************************
+     * Field Component Factories
+     * ************************************************************************/
+    FieldComponentFactoryRegistry.setFactory(workbenchContext,
+      "FileString", new FileFieldComponentFactory(workbenchContext));
+
+    /* *************************************************************************
      * menu FILE
-     **************************************************************************/
-    OpenFilePlugin openFile = new OpenFilePlugin();
+     * ************************************************************************/
+    OpenFilePlugIn openFile = new OpenFilePlugIn();
     openFile.initialize(pluginContext);
 
     OpenRecentPlugIn openRecent = OpenRecentPlugIn.get(workbenchContext);
     openRecent.updateMenu();
+
+    OpenProjectPlugIn openProject = new OpenProjectPlugIn();
+    openProject.initialize(pluginContext);
 
     SaveImageAsSVGPlugIn imageSvgPlugin = new SaveImageAsSVGPlugIn();
     imageSvgPlugin.initialize(new PlugInContext(workbenchContext, null, null,
