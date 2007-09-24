@@ -183,6 +183,12 @@
       <artifactId>junit</artifactId>
       <version>3.8</version>
     </dependency>
+    <dependency>
+      <groupId>net.iharder.dnd</groupId>
+      <artifactId>filedrop</artifactId>
+      <version>1.01</version>
+    </dependency>
   </dependencies>
+
 </project>
 

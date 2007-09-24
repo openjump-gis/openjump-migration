@@ -26,6 +26,7 @@
  ******************************************************************************/
 package org.openjump.core.ui.plugin.file;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.LinkedHashSet;
@@ -35,6 +36,8 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.swing.Icon;
+
+import net.iharder.dnd.FileDrop;
 
 import org.openjump.core.ui.enablecheck.BooleanPropertyEnableCheck;
 import org.openjump.core.ui.io.file.FileLayerLoader;
@@ -103,6 +106,10 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
     this.enableCheck = enableCheck;
   }
 
+  public OpenFilePlugIn(WorkbenchContext workbenchContext, File[] files) {
+    this(workbenchContext, files[0]);
+  }
+
   /**
    * Initialise the main instance of this plug-in, should not be called for the
    * Recent menu open file plug-ins.
@@ -110,7 +117,7 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
    * @param context The plug-in context.
    * @exception Exception If there was an error initialising the plug-in.
    */
-  public void initialize(PlugInContext context) throws Exception {
+  public void initialize(final PlugInContext context) throws Exception {
     if (file == null && workbenchContext == null) {
       setWorkbenchContext(context.getWorkbenchContext());
       EnableCheckFactory checkFactory = new EnableCheckFactory(workbenchContext);
@@ -135,6 +142,12 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
       // Add layer pop-up menu
       featureInstaller.addPopupMenuItem(frame.getCategoryPopupMenu(), this,
         name, false, icon, enableCheck);
+      new FileDrop(frame, new FileDrop.Listener() {
+        public void filesDropped(File[] files) {
+          OpenFilePlugIn plugin = new OpenFilePlugIn(workbenchContext, files);
+          plugin.actionPerformed(new ActionEvent(this, 0, ""));
+        }
+      });
     }
   }
 

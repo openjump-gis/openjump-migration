@@ -9,6 +9,7 @@
           * Added ComponentFactory frameworks for Swing Components and editable
             Swing Components (fields).
           * Added the new Open File, Open Project and Open Recent menus.
+          * Added drag and drop support for loading files
  
  2007-09-17 beckerl <becker.larry@gmail.com>
           * Added mouse wheel zooming to the PanTool. 
