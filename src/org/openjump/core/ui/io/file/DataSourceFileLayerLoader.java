@@ -111,7 +111,10 @@ public class DataSourceFileLayerLoader extends AbstractFileLayerLoader {
         Layer layer = new Layer(layerName,
           layerManager.generateLayerFillColor(), dataset, layerManager);
         Category category = TaskUtil.getSelectedCategoryName(workbenchContext);
-        category.add(0, layer);
+        layerManager.addLayerable(category.getName(), layer);
+        layer.setName(layerName);
+        
+//        category.add(0, layer);
 
         layer.setDataSourceQuery(dataSourceQuery);
         layer.setFeatureCollectionModified(false);

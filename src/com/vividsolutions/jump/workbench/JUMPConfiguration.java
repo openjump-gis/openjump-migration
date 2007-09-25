@@ -57,6 +57,7 @@ import com.vividsolutions.jump.plugin.edit.PrecisionReducerPlugIn;
 import com.vividsolutions.jump.plugin.qa.DiffGeometryPlugIn;
 import com.vividsolutions.jump.workbench.datasource.AbstractSaveDatasetAsPlugIn;
 import com.vividsolutions.jump.workbench.datasource.InstallStandardDataSourceQueryChoosersPlugIn;
+import com.vividsolutions.jump.workbench.datasource.LoadDatasetPlugIn;
 import com.vividsolutions.jump.workbench.datasource.SaveDatasetAsPlugIn;
 import com.vividsolutions.jump.workbench.datastore.ConnectionManager;
 import com.vividsolutions.jump.workbench.plugin.AbstractPlugIn;
@@ -250,7 +251,7 @@ public class JUMPConfiguration implements Setup {
   // OpenJUMPConfiguration
   // private BeanShellPlugIn beanShellPlugIn = new BeanShellPlugIn();
 
-  // private LoadDatasetPlugIn loadDatasetPlugIn = new LoadDatasetPlugIn();
+   private LoadDatasetPlugIn loadDatasetPlugIn = new LoadDatasetPlugIn();
   // private LoadDatasetFromFilePlugIn loadDatasetFromFilePlugIn = new
   // LoadDatasetFromFilePlugIn();
   private SaveDatasetAsPlugIn saveDatasetAsPlugIn = new SaveDatasetAsPlugIn();
@@ -387,7 +388,11 @@ public class JUMPConfiguration implements Setup {
       .getFrame()
       .getCategoryPopupMenu(), addNewLayerPlugIn, addNewLayerPlugIn.getName(),
       false, null, null);
-
+    
+    featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()
+      .getFrame().getCategoryPopupMenu(), loadDatasetPlugIn,
+      loadDatasetPlugIn.getName() + "...", false, LoadDatasetPlugIn.getIcon(),
+      LoadDatasetPlugIn.createEnableCheck(workbenchContext));
     // --
     /*
      * featureInstaller.addPopupMenuItem(workbenchContext.getWorkbench()

@@ -62,6 +62,7 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
       OpenRecentPlugIn plugin = (OpenRecentPlugIn)blackboard.get(KEY);
       if (plugin == null) {
         plugin = new OpenRecentPlugIn();
+        blackboard.put(KEY, plugin);
       }
       return plugin;
     }
@@ -84,7 +85,7 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
   public void initialize(PlugInContext context) throws Exception {
     super.initialize(context);
     featureInstaller = context.getFeatureInstaller();
-    workbenchContext.getBlackboard().put(KEY, this);
+
     recentFiles = getFileNames(RECENT_FILES_KEY);
     recentProjects = getFileNames(RECENT_PROJECTS_KEY);
     FeatureInstaller featureInstaller = context.getFeatureInstaller();

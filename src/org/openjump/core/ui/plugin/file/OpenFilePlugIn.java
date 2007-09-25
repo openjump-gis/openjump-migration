@@ -237,10 +237,10 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
         }
       }
     } finally {
+      state = null;
       for (File file : openedFiles) {
         recentPlugin.addRecentFile(file);
       }
-      state = null;
     }
   }
 
