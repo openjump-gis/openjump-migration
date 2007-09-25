@@ -33,6 +33,7 @@ import org.openjump.core.ui.plugin.edittoolbox.DrawConstrainedLineStringPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.DrawConstrainedPolygonPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.RotateSelectedItemPlugIn;
 import org.openjump.core.ui.plugin.edittoolbox.SelectOneItemPlugIn;
+import org.openjump.core.ui.plugin.file.FileDragDropPlugin;
 import org.openjump.core.ui.plugin.file.OpenFilePlugIn;
 import org.openjump.core.ui.plugin.file.OpenProjectPlugIn;
 import org.openjump.core.ui.plugin.file.OpenRecentPlugIn;
@@ -108,8 +109,7 @@ public class OpenJumpConfiguration {
 
   public static void loadOpenJumpPlugIns(final WorkbenchContext workbenchContext)
     throws Exception {
-    PlugInContext pluginContext = new PlugInContext(workbenchContext, null,
-      null, null, null);
+    PlugInContext pluginContext = workbenchContext.createPlugInContext();
 
 
 
@@ -138,6 +138,9 @@ public class OpenJumpConfiguration {
     OpenProjectPlugIn openProject = new OpenProjectPlugIn();
     openProject.initialize(pluginContext);
 
+    FileDragDropPlugin fileDragDropPlugin = new FileDragDropPlugin();
+    fileDragDropPlugin.initialize(pluginContext);
+    
     SaveImageAsSVGPlugIn imageSvgPlugin = new SaveImageAsSVGPlugIn();
     imageSvgPlugin.initialize(new PlugInContext(workbenchContext, null, null,
       null, null));

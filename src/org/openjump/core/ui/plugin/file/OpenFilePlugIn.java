@@ -76,7 +76,7 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
   private OpenFileWizardState state;
 
   /** The file to load if this is an Open recent plug-in. */
-  private File file;
+  private File[] files;
 
   /** The open recent plug-in to save loaded files to. */
   private OpenRecentPlugIn recentPlugin;
@@ -96,7 +96,9 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
    */
   public OpenFilePlugIn(final WorkbenchContext workbenchContext, final File file) {
     super(file.getName(), file.getAbsolutePath());
-    this.file = file;
+    this.files = new File[] {
+      file
+    };
     setWorkbenchContext(workbenchContext);
     MultiEnableCheck enableCheck = new MultiEnableCheck();
     EnableCheckFactory checkFactory = new EnableCheckFactory(workbenchContext);
@@ -118,7 +120,7 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
    * @exception Exception If there was an error initialising the plug-in.
    */
   public void initialize(final PlugInContext context) throws Exception {
-    if (file == null && workbenchContext == null) {
+    if (files == null && workbenchContext == null) {
       setWorkbenchContext(context.getWorkbenchContext());
       EnableCheckFactory checkFactory = new EnableCheckFactory(workbenchContext);
       this.enableCheck = checkFactory.createWindowWithLayerManagerMustBeActiveCheck();
@@ -142,12 +144,6 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
       // Add layer pop-up menu
       featureInstaller.addPopupMenuItem(frame.getCategoryPopupMenu(), this,
         name, false, icon, enableCheck);
-      new FileDrop(frame, new FileDrop.Listener() {
-        public void filesDropped(File[] files) {
-          OpenFilePlugIn plugin = new OpenFilePlugIn(workbenchContext, files);
-          plugin.actionPerformed(new ActionEvent(this, 0, ""));
-        }
-      });
     }
   }
 
@@ -178,10 +174,8 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
     SelectFileOptionsPanel optionsPanel = new SelectFileOptionsPanel(
       workbenchContext, state);
     WizardPanel[] wizardPanels = null;
-    if (file != null) {
-      state.setupFileLoaders(new File[] {
-        file
-      }, null);
+    if (files != null) {
+      state.setupFileLoaders(files, null);
       String nextPanel = state.getNextPanel(SelectFilesPanel.KEY);
       if (nextPanel == SelectFileLoaderPanel.KEY) {
         wizardPanels = new WizardPanel[] {

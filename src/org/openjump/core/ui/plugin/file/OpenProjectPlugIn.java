@@ -32,6 +32,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -75,7 +76,7 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
 
   private Task sourceTask;
 
-  private File file;
+  private File[] files;
 
   private File selectedFile;
 
@@ -86,9 +87,14 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
   public OpenProjectPlugIn(WorkbenchContext workbenchContext, File file) {
     super(file.getName(), file.getAbsolutePath());
     this.workbenchContext = workbenchContext;
-    this.file = file;
+    this.files = new File[] {file};
     this.enableCheck = new BooleanPropertyEnableCheck(file, "exists", true,
       "File does not exist: " + file.getAbsolutePath());
+  }
+
+  public OpenProjectPlugIn(WorkbenchContext workbenchContext, File[] files) {
+    this.workbenchContext = workbenchContext;
+    this.files = files;
   }
 
   public void initialize(PlugInContext context) throws Exception {
@@ -120,7 +126,7 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
   public boolean execute(PlugInContext context) throws Exception {
     initFileChooser();
     reportNothingToUndoYet(context);
-    if (file == null) {
+    if (files == null) {
       if (JFileChooser.APPROVE_OPTION != fileChooser.showOpenDialog(context.getWorkbenchFrame())) {
         return false;
       }
@@ -129,7 +135,9 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
 
       return true;
     } else {
-      open(file, context.getWorkbenchFrame());
+      for (File file : files) {
+        open(file, context.getWorkbenchFrame());
+      }
       return true;
     }
   }
