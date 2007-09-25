@@ -32,11 +32,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -57,7 +55,6 @@ import com.vividsolutions.jump.workbench.model.Layer;
 import com.vividsolutions.jump.workbench.model.LayerManager;
 import com.vividsolutions.jump.workbench.model.Layerable;
 import com.vividsolutions.jump.workbench.model.Task;
-import com.vividsolutions.jump.workbench.plugin.MultiEnableCheck;
 import com.vividsolutions.jump.workbench.plugin.PlugInContext;
 import com.vividsolutions.jump.workbench.ui.GUIUtil;
 import com.vividsolutions.jump.workbench.ui.MenuNames;
@@ -69,6 +66,9 @@ import com.vividsolutions.jump.workbench.ui.plugin.WorkbenchContextReference;
 
 public class OpenProjectPlugIn extends ThreadedBasePlugIn {
   private static final String KEY = OpenProjectPlugIn.class.getName();
+
+  private static final String FILE_DOES_NOT_EXIST = I18N.get(KEY
+    + ".file-does-not-exist");
 
   private JFileChooser fileChooser;
 
@@ -87,9 +87,11 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
   public OpenProjectPlugIn(WorkbenchContext workbenchContext, File file) {
     super(file.getName(), file.getAbsolutePath());
     this.workbenchContext = workbenchContext;
-    this.files = new File[] {file};
+    this.files = new File[] {
+      file
+    };
     this.enableCheck = new BooleanPropertyEnableCheck(file, "exists", true,
-      "File does not exist: " + file.getAbsolutePath());
+      FILE_DOES_NOT_EXIST + ": " + file.getAbsolutePath());
   }
 
   public OpenProjectPlugIn(WorkbenchContext workbenchContext, File[] files) {
@@ -101,12 +103,10 @@ public class OpenProjectPlugIn extends ThreadedBasePlugIn {
     super.initialize(context);
     FeatureInstaller featureInstaller = context.getFeatureInstaller();
 
-    Icon icon = getIcon();
-    String name = getName() + "...{pos:5}";
     // Add File Menu
-    featureInstaller.addMainMenuItemWithJava14Fix(this, new String[] {
+    featureInstaller.addMainMenuItem(new String[] {
       MenuNames.FILE
-    }, name, false, icon, new MultiEnableCheck());
+    }, this, 2);
   }
 
   private void initFileChooser() {

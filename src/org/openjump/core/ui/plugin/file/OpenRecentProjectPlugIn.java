@@ -48,6 +48,10 @@ import com.vividsolutions.jump.workbench.ui.MenuNames;
 import com.vividsolutions.jump.workbench.ui.plugin.FeatureInstaller;
 import com.vividsolutions.jump.workbench.ui.plugin.OpenProjectPlugIn;
 
+/**
+ * @deprecated
+ *
+ */
 public class OpenRecentProjectPlugIn extends OpenProjectPlugIn {
     private int taskNum = -1;
     private static final String OPEN_RECENT_TASK = I18N.get("org.openjump.core.ui.plugin.file.OpenRecentProjectPlugIn.Open-Recent-Task");

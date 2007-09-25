@@ -51,13 +51,23 @@ import javax.swing.SpringLayout;
 import org.openjump.core.ui.io.file.FileLayerLoader;
 import org.openjump.swing.util.SpringUtilities;
 
+import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.workbench.ui.InputChangedListener;
 import com.vividsolutions.jump.workbench.ui.wizard.WizardPanel;
 
 public class SelectFileLoaderPanel extends JPanel implements WizardPanel {
+
   private static final long serialVersionUID = -3105562554743126639L;
 
   public static final String KEY = SelectFileLoaderPanel.class.getName();
+  public static final String TITLE = I18N.get(KEY);
+
+  public static final String FILE_TYPE = I18N.get(KEY + ".file-type");
+
+  public static final String INSTRUCTIONS = I18N.get(KEY + ".instructions");
+
+  public static final String USE_SAME_SETTINGS_FOR = I18N.get(KEY
+    + ".use-same-settings-for");
 
   private Map<String, JPanel> extensionPanelMap = new HashMap<String, JPanel>();
 
@@ -108,7 +118,7 @@ public class SelectFileLoaderPanel extends JPanel implements WizardPanel {
     final String extension, final Set<URI> files,
     final Set<FileLayerLoader> loaders, ActionListener useSameListener) {
     if (files.size() > 1) {
-      panel.add(new JLabel("Use same setting for *." + extension));
+      panel.add(new JLabel(USE_SAME_SETTINGS_FOR+" *." + extension));
       JCheckBox useSameField = new JCheckBox();
       useSameField.setSelected(false);
       panel.add(useSameField);
@@ -148,13 +158,13 @@ public class SelectFileLoaderPanel extends JPanel implements WizardPanel {
   protected void addSameSettingsFields(final JPanel panel,
     final String extension, final Set<URI> files,
     final Set<FileLayerLoader> loaders, final ActionListener useSameListener) {
-    panel.add(new JLabel("Use same setting for *." + extension));
+    panel.add(new JLabel(USE_SAME_SETTINGS_FOR+" *." + extension));
     JCheckBox useSameField = new JCheckBox();
     useSameField.setSelected(true);
     useSameField.addActionListener(useSameListener);
     panel.add(useSameField);
 
-    panel.add(new JLabel("File Type"));
+    panel.add(new JLabel(FILE_TYPE));
 
     JComboBox loaderField = new JComboBox();
     for (FileLayerLoader loader : loaders) {
@@ -196,7 +206,7 @@ public class SelectFileLoaderPanel extends JPanel implements WizardPanel {
   }
 
   public String getInstructions() {
-    return "Select the type of file for each file extension or individual file";
+    return INSTRUCTIONS;
   }
 
   public String getNextID() {
@@ -204,7 +214,7 @@ public class SelectFileLoaderPanel extends JPanel implements WizardPanel {
   }
 
   public String getTitle() {
-    return "Select File Types";
+    return TITLE;
   }
 
   public boolean isInputValid() {

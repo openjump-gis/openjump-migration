@@ -64,6 +64,15 @@ public class SelectFileOptionsPanel extends JPanel implements WizardPanel {
 
   public static final String KEY = SelectFileOptionsPanel.class.getName();
 
+  public static final String TITLE = I18N.get(KEY);
+
+  public static final String FILE_TYPE = I18N.get(KEY + ".file-type");
+
+  public static final String INSTRUCTIONS = I18N.get(KEY + ".instructions");
+
+  public static final String USE_SAME_SETTINGS_FOR = I18N.get(KEY
+    + ".use-same-settings-for");
+
   private JPanel mainPanel;
 
   private Set<InputChangedListener> listeners = new LinkedHashSet<InputChangedListener>();
@@ -133,7 +142,7 @@ public class SelectFileOptionsPanel extends JPanel implements WizardPanel {
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     if (files.size() > 1) {
       JPanel samePanel = new JPanel(new SpringLayout());
-      samePanel.add(new JLabel("Use same setting for " + description));
+      samePanel.add(new JLabel(USE_SAME_SETTINGS_FOR + description));
       JCheckBox useSameField = new JCheckBox();
       useSameField.setSelected(false);
       samePanel.add(useSameField);
@@ -178,7 +187,7 @@ public class SelectFileOptionsPanel extends JPanel implements WizardPanel {
     String description, Set<URI> files, List<Option> optionFields,
     ActionListener useSameListener) {
     panel.setLayout(new SpringLayout());
-    panel.add(new JLabel("Use same setting for all " + description));
+    panel.add(new JLabel(USE_SAME_SETTINGS_FOR + description));
     JCheckBox useSameField = new JCheckBox();
     useSameField.setSelected(true);
     useSameField.addActionListener(useSameListener);
@@ -213,7 +222,7 @@ public class SelectFileOptionsPanel extends JPanel implements WizardPanel {
   }
 
   public String getInstructions() {
-    return "Select the type of file for each file type or individual file";
+    return INSTRUCTIONS;
   }
 
   public String getNextID() {
@@ -221,7 +230,7 @@ public class SelectFileOptionsPanel extends JPanel implements WizardPanel {
   }
 
   public String getTitle() {
-    return "Select File Options";
+    return TITLE;
   }
 
   public boolean isInputValid() {

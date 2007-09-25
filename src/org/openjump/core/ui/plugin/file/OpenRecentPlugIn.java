@@ -62,11 +62,6 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
       OpenRecentPlugIn plugin = (OpenRecentPlugIn)blackboard.get(KEY);
       if (plugin == null) {
         plugin = new OpenRecentPlugIn();
-        try {
-          plugin.initialize(new PlugInContext(context, null, null, null, null));
-        } catch (Throwable e) {
-          context.getErrorHandler().handleThrowable(e);
-        }
       }
       return plugin;
     }
@@ -95,7 +90,7 @@ public class OpenRecentPlugIn extends AbstractPlugIn {
     FeatureInstaller featureInstaller = context.getFeatureInstaller();
     recentMenu = FeatureInstaller.addMainMenu(featureInstaller, new String[] {
       MenuNames.FILE
-    }, getName(), 0);
+    }, getName(), 3);
     InvokeMethodPropertyChangeListener listener = new InvokeMethodPropertyChangeListener(
       this, "updateFileAndProjectMenu", new Object[] {
         recentMenu

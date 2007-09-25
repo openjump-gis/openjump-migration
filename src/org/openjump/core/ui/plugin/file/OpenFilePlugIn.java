@@ -26,7 +26,6 @@
  ******************************************************************************/
 package org.openjump.core.ui.plugin.file;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.net.URI;
 import java.util.LinkedHashSet;
@@ -37,8 +36,6 @@ import java.util.Map.Entry;
 
 import javax.swing.Icon;
 
-import net.iharder.dnd.FileDrop;
-
 import org.openjump.core.ui.enablecheck.BooleanPropertyEnableCheck;
 import org.openjump.core.ui.io.file.FileLayerLoader;
 import org.openjump.core.ui.plugin.ThreadedBasePlugIn;
@@ -47,6 +44,7 @@ import org.openjump.core.ui.plugin.file.open.SelectFileLoaderPanel;
 import org.openjump.core.ui.plugin.file.open.SelectFileOptionsPanel;
 import org.openjump.core.ui.plugin.file.open.SelectFilesPanel;
 
+import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.task.TaskMonitor;
 import com.vividsolutions.jump.workbench.JUMPWorkbench;
 import com.vividsolutions.jump.workbench.WorkbenchContext;
@@ -69,6 +67,11 @@ import com.vividsolutions.jump.workbench.ui.wizard.WizardPanel;
  * @author Paul Austin
  */
 public class OpenFilePlugIn extends ThreadedBasePlugIn {
+  private static final String KEY = OpenFilePlugIn.class.getName();
+
+  private static final String FILE_DOES_NOT_EXIST = I18N.get(KEY
+    + ".file-does-not-exist");
+
   /** The registry for the workbench. */
   private Registry registry;
 
@@ -104,7 +107,7 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
     EnableCheckFactory checkFactory = new EnableCheckFactory(workbenchContext);
     enableCheck.add(checkFactory.createWindowWithLayerManagerMustBeActiveCheck());
     enableCheck.add(new BooleanPropertyEnableCheck(file, "exists", true,
-      "File does not exist: " + file.getAbsolutePath()));
+      FILE_DOES_NOT_EXIST +": " + file.getAbsolutePath()));
     this.enableCheck = enableCheck;
   }
 
@@ -135,7 +138,7 @@ public class OpenFilePlugIn extends ThreadedBasePlugIn {
       // Add File Menu
       featureInstaller.addMainMenuItem(new String[] {
         MenuNames.FILE
-      }, this, 0);
+      }, this, 1);
 
       // Add tool-bar Icon
       WorkbenchToolBar toolBar = frame.getToolBar();

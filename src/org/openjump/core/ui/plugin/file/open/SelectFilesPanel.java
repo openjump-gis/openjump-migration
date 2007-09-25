@@ -43,6 +43,7 @@ import org.openjump.core.ui.io.file.FileLayerLoader;
 import org.openjump.core.ui.io.file.FileLayerLoaderExtensionFilter;
 import org.openjump.core.ui.io.file.FileNameExtensionFilter;
 
+import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.util.Blackboard;
 import com.vividsolutions.jump.workbench.WorkbenchContext;
 import com.vividsolutions.jump.workbench.datasource.LoadFileDataSourceQueryChooser;
@@ -54,6 +55,12 @@ import com.vividsolutions.jump.workbench.ui.wizard.WizardPanel;
 public class SelectFilesPanel extends JFileChooser implements WizardPanel {
 
   public static final String KEY = SelectFilesPanel.class.getName();
+
+  public static final String TITLE = I18N.get(KEY);
+
+  public static final String INSTRUCTIONS = I18N.get(KEY + ".instructions");
+
+  public static final String ALL_FILES = I18N.get(KEY + ".all-files");
 
   private Set<InputChangedListener> listeners = new LinkedHashSet<InputChangedListener>();
 
@@ -86,7 +93,7 @@ public class SelectFilesPanel extends JFileChooser implements WizardPanel {
       filters.put(filter.getDescription(), filter);
     }
 
-    FileFilter allFilter = new FileNameExtensionFilter("All Files",
+    FileFilter allFilter = new FileNameExtensionFilter(ALL_FILES,
       allExtensions.toArray(new String[0]));
     addChoosableFileFilter(allFilter);
     for (FileFilter filter : filters.values()) {
@@ -127,7 +134,7 @@ public class SelectFilesPanel extends JFileChooser implements WizardPanel {
   }
 
   public String getInstructions() {
-    return "Select the files to load into the current project";
+    return INSTRUCTIONS;
   }
 
   public String getNextID() {
@@ -135,7 +142,7 @@ public class SelectFilesPanel extends JFileChooser implements WizardPanel {
   }
 
   public String getTitle() {
-    return "Select Files";
+    return TITLE;
   }
 
   public boolean isInputValid() {

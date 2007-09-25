@@ -132,11 +132,11 @@ public class OpenJumpConfiguration {
     OpenFilePlugIn openFile = new OpenFilePlugIn();
     openFile.initialize(pluginContext);
 
-    OpenRecentPlugIn openRecent = OpenRecentPlugIn.get(workbenchContext);
-    openRecent.updateMenu();
-
     OpenProjectPlugIn openProject = new OpenProjectPlugIn();
     openProject.initialize(pluginContext);
+
+    OpenRecentPlugIn openRecent = OpenRecentPlugIn.get(workbenchContext);
+    openRecent.initialize(pluginContext);
 
     FileDragDropPlugin fileDragDropPlugin = new FileDragDropPlugin();
     fileDragDropPlugin.initialize(pluginContext);
