@@ -87,6 +87,9 @@ public class TaskFrame extends JInternalFrame implements TaskFrameProxy,
         return getLayerViewPanel().getSelectionManager();
     }
 
+    public TaskFrame() {
+    }
+    
     private TaskFrame(Task task, int cloneIndex,
             final WorkbenchContext workbenchContext) {
         this.task = task;
@@ -224,6 +227,13 @@ public class TaskFrame extends JInternalFrame implements TaskFrameProxy,
         return layerViewPanel;
     }
 
+    public void setTask(Task task) {
+      if (this.task != null) {
+        throw new IllegalStateException("Task is already set");
+      } else {
+        this.task = task;
+      }
+    }
     public Task getTask() {
         return task;
     }
@@ -278,7 +288,7 @@ public class TaskFrame extends JInternalFrame implements TaskFrameProxy,
         updateTitle();
     }
 
-    private void updateTitle() {
+    protected void updateTitle() {
         String title = task.getName();
         if (cloneIndex > 0) {
             title += " (View " + (cloneIndex + 1) + ")";
@@ -290,7 +300,7 @@ public class TaskFrame extends JInternalFrame implements TaskFrameProxy,
         return splitPane;
     }
 
-    private void installAnimator() {
+    protected void installAnimator() {
         timer = new Timer(500, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (clockedRenderingInProgress()) {
