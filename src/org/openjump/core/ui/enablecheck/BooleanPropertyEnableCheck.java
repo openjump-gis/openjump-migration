@@ -34,10 +34,23 @@ public class BooleanPropertyEnableCheck implements EnableCheck {
    *          value.
    * @param expectedValue The expected value to be returned for the check to be
    *          enabled.
-   * @param disabledMessage 
    */
   public BooleanPropertyEnableCheck(final Object object,
-    final String checkMethodName, final boolean expectedValue, String disabledMessage) {
+    final String checkMethodName, final boolean expectedValue) {
+    this(object, checkMethodName, expectedValue, "");
+  }
+
+  /**
+   * @param object The object to invoke the method on.
+   * @param checkMethodName The name of the check method which returns a boolean
+   *          value.
+   * @param expectedValue The expected value to be returned for the check to be
+   *          enabled.
+   * @param disabledMessage
+   */
+  public BooleanPropertyEnableCheck(final Object object,
+    final String checkMethodName, final boolean expectedValue,
+    String disabledMessage) {
     Class clazz = object.getClass();
     this.object = object;
     this.expectedValue = expectedValue;
