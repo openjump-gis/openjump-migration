@@ -1,9 +1,19 @@
 # for display continuity sake please use 2 spaces instead of tabs
 
+2012-02-24 mmichaud <michael.michaud@free.fr>
+  * Bug #3487686 BeanshellEditor : the window focus problem between OpenJUMP
+    and BeanshellEditor should be solved (in LayerViewPanel class)
+
+2012-02-23 mmichaud <michael.michaud@free.fr>
+  * Bug #3486847 Wrong Dialog message when Closing project
+  * Bug #3491956 Union of overlapping lines could not be merged
+
 2012-02-22 mmichaud <michael.michaud@free.fr>
   * Bug #3488976 : fixed problems in the Noder plugin except one depending on a
     new version of JTS (preserving z with snap-rounding noder). There is still
     room for optimization in this plugin.
+  # Bug 3488028 : datasets read from a zip file are made readonly
+    (org.openjump.core.ui.io.file.DataSourceFileLayerLoader)
 
 2012-02-19 mmichaud <michael.michaud@free.fr>
   * Improved SnapToGridPolicy to avoid floating point issue with fractional
