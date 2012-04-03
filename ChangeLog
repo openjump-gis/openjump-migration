@@ -1,5 +1,28 @@
 # for display continuity sake please use 2 spaces instead of tabs
 
+2012-04-02 mmichaud <michael.michaud@free.fr>
+  * Finish to fix 3513864 : add an icon to RasterImageLayer
+  
+2012-04-02 ede
+  * Finish 3510778 with the help of Larry (Michaël's fix was inefficient)
+  * workaround for bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7122141
+    and FeatureInstaller cleaning
+
+2012-04-01 mmichaud <michael.michaud@free.fr>
+  * Bug #3513735 Sextante Raster visibility not saved in project
+  * Bug #3513864 Left click on RasterImageLayer name throws exceptions
+
+2012-03-31 mmichaud <michael.michaud@free.fr>
+  * Bug #3510778 EZ Button does not respect layer editability
+  * Bug #3513741 Attribute used to dissolve is repeated in unioned layer
+  * FR #3511501 Change "Fill Polygon" to "Create Polygon from Closed Area"
+
+2012-03-24 mmichaud <michael.michaud@free.fr>
+  * FR 3472020 : use a numeric pattern to save long attribute names in dbf
+  * FR 3488025 : Delete existing sbn/sbx/qix files when writing a shp
+  * FR 3506380 : union selected features in place implemented in
+    MergeSelectedFeaturesPlugIn (right click in LayerViewPanel)
+  
 2012-03-18 mmichaud <michael.michaud@free.fr>
   * FlexibleDateParser now takes Locale into account for Pattern ordering
 
