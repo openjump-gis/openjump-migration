@@ -1322,7 +1322,7 @@ public void configureDatastores(final WorkbenchContext context) throws Exception
         add(new ZoomTool(), workbenchContext);
         add(new PanTool(), workbenchContext);
 		// Test for the new Zoom/Pan tool, comment the following line out, if it makes problems
-		add(new SuperZoomPanTool(), workbenchContext);
+		// add(new SuperZoomPanTool(), workbenchContext);
 		frame.getToolBar().addSeparator();
         frame.getToolBar().addPlugIn(zoomToFullExtentPlugIn.getIcon(),
                 zoomToFullExtentPlugIn,
