@@ -52,6 +52,6 @@ public class InstallStandardFeatureTextWritersPlugIn extends AbstractPlugIn {
             return wktWriter.write(feature.getGeometry()).trim();
         }
 
-        private WKTWriter wktWriter = new WKTWriter();
+        private WKTWriter wktWriter = new WKTWriter(3);
     };
 }
