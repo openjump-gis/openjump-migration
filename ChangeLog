@@ -1,5 +1,20 @@
 # for display continuity sake please use 2 spaces instead of tabs
 
+2012-04-14 mmichaud <michael.michaud@free.fr>
+  * Fixed a bug in WarpingPanel arising when the active frame is not a
+    LayerManagerProxy (HTMLFrame for example)
+
+2012-04-13 ede
+  * fix NPE when drawing invalid geometries
+  * new info icon and cursor based on famfam silk
+  * new installer image based on stefan's design chosen by user list voting
+
+2012-04-13 mmichaud <michael.michaud@free.fr>
+  * Add a densify function to Tools > Analysis > Geometry function
+  
+2012-04-11 mmichaud <michael.michaud@free.fr>
+  * New CreateGridPlugIn for OpenJUMP 1.6 (see also FR 2716201)
+
 2012-04-09 ede
   * bugfix 3510832 "Changing schema with attribute table opened throw exception"
     https://sourceforge.net/tracker/index.php?func=detail&aid=3510832&group_id=118054&atid=679906
@@ -20,6 +35,7 @@
 
 2012-04-06 ede
   * Selected Skin is now persistent over application restarts
+  * bugfix: OptionsDialog is skinable again
 
 2012-04-02 mmichaud <michael.michaud@free.fr>
   * Finish to fix 3513864 : add an icon to RasterImageLayer
@@ -91,6 +107,9 @@
         Polygonize the Dataset
       - Bug #3489028 : make a strict intersection test to return the right 
         Polygon
+
+2012-02-12 mmichaud <michael.michaud@free.fr>
+  * Reactivated the North-Arrow plugin (in view menu)
 
 2012-01-25 sstein <sstein@geo.uzh.ch>
   * adjusted terminology:
