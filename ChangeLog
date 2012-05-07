@@ -1,5 +1,21 @@
 # for display continuity sake please use 2 spaces instead of tabs
 
+2012-05-05 mmichaud <michael.michaud@free.fr>
+  * JML writer preserved z values only if first coordinate had a z, it now 
+    write 3d geometries if any coordinate has a z value.
+
+2012-05-04 ede
+  * probably bugfix 3521940: "Trouble with opening several shapefiles from one zip file"
+    https://sourceforge.net/tracker/?func=detail&aid=3521940&group_id=118054&atid=679906
+    - Note to us all: whoever wrote the JUMPReader code was either ingenious or mad or both at  the same time
+       we should probably strip the hardcoded zip/gz support an write a proper datasource for that
+
+2012-05-04 mmichaud <michael.michaud@free.fr>
+  * switch back to 3D geometry description in info panel wkt format
+    add z value to geometry description in info panel CL format
+  * Add a AddGeometryAttributesPlugIn as discussed in this thread
+    https://sourceforge.net/mailarchive/forum.php?thread_name=4F9E3579.9020702%40free.fr&forum_name=jump-pilot-devel
+
 2012-05-03 ede
   "a startup overhaul draft"
   * JUMPWorkbench
