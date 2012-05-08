@@ -1,6 +1,18 @@
 # for display continuity sake please use 2 spaces instead of tabs
 
-2012-05-04 ede  "refurbished compressed files/archive support"
+2012-05-08 mmichaud <michael.michaud@free.fr>
+  * WMS : cache the label associated to each MapLayer in MapLayerPanel as it is
+    called very often and includes a costly calculation (getFullSRSList) 
+
+2012-05-06 ede
+  - reverted AboutDialog changes by Matthias from 2012-04-22
+    please find a way to include readme.txt into webstart
+    also see
+     http://www.mail-archive.com/jump-pilot-devel@lists.sourceforge.net/msg10867.html
+     and
+     http://www.mail-archive.com/jump-pilot-devel@lists.sourceforge.net/msg10840.html
+
+2012-05-05 ede  "refurbished compressed files/archive support"
   - separated "Compressed File" from "Archive with supported formats"
   - added BZIP2 support for TAR archives or compressed file
   - added support for TAR archives
@@ -14,6 +26,8 @@
 2012-05-05 mmichaud <michael.michaud@free.fr>
   * JML writer preserved z values only if first coordinate had a z, it now 
     write 3d geometries if any coordinate has a z value.
+  * Add the Add3DGeometryAttributesPlugIn able to add the following attributes :
+    start z, end z, minz, maxz, mean z, length3d, slopes z=NaN...
 
 2012-05-04 ede
   * probably bugfix 3521940: "Trouble with opening several shapefiles from one zip file"
