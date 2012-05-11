@@ -53,7 +53,7 @@ public class PostgisSQLBuilder {
     // Example of Postgis SQL: GEOM && SetSRID('BOX3D(191232 243117,191232 243119)'::box3d,-1);
     StringBuffer buf = new StringBuffer();
     // fixed by mmichaud on 2010-05-27 for mixed case geometryColName names
-    buf.append("\"" + geometryColName + "\" && SetSRID('BOX3D(");
+    buf.append("\"" + geometryColName + "\" && ST_SetSRID('BOX3D(");
     buf.append(env.getMinX()
                + " " + env.getMinY()
                + "," + env.getMaxX()
@@ -84,7 +84,7 @@ public class PostgisSQLBuilder {
     StringBuffer buf = new StringBuffer();
     // fixed by mmichaud using a patch from jaakko [2008-05-21]
     // query geomColName as geomColName instead of geomColName as geomColName + "_wkb"
-    buf.append("AsEwkb(\"").append(geomColName).append("\") as ").append(geomColName);
+    buf.append("ST_AsEWKB(\"").append(geomColName).append("\") as ").append(geomColName);
     for (int i = 0; i < colName.length; i++) {
       if (! geomColName.equalsIgnoreCase(colName[i])) {
         buf.append(",\"");
