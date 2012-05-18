@@ -108,6 +108,7 @@
         <version.number>unknown</version.number>
         <version.release>stable</version.release>
         <version.string>${artifactId}-${version.number}-r${version.revision}</version.string>
+        <portable.filename>${artifactId}-Portable-${version.number}-r${version.revision}</portable.filename>
       </properties>
       <build>
         <plugins>
@@ -146,6 +147,59 @@
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+              <execution>
+                <id>recompress portable zip distros</id>
+                <phase>package</phase>
+                <configuration>
+                  <target>
+                    <property name="file.encoding" value="ISO-8859-1" />
+                    <property name="recompress.folder"
+                      value="${project.build.directory}/recompress" />
+                    <delete includeemptydirs="true" quiet="true">
+                      <fileset dir="${project.build.directory}/recompress"
+                        followsymlinks="false" />
+                    </delete>
+                    <!-- Using an ant task to deflate *.zip -->
+                    <unzip
+                      src="${project.build.directory}/${version.string}-CORE.zip"
+                      dest="${recompress.folder}/core">
+                      <cutdirsmapper dirs="1" />
+                    </unzip>
+                    <unzip
+                      src="${project.build.directory}/${version.string}-PLUS.zip"
+                      dest="${recompress.folder}/plus">
+                      <cutdirsmapper dirs="1" />
+                    </unzip>
+                    <!-- Set correct permissions for executables -->
+                    <chmod dir="${recompress.folder}" perm="644" type="file"
+                      includes="**" verbose="true" />
+                    <chmod dir="${recompress.folder}" perm="755" type="dir"
+                      includes="**" verbose="true" />
+                    <chmod dir="${recompress.folder}" perm="755" type="file"
+                      includes="**/*.command,**/*.sh,**/*.bat,**/*.exe" verbose="true" />
+                    <!-- Recompress to distro zips -->
+                    <zip destfile="${recompress.folder}/${portable.filename}-CORE.zip"
+                      level="9">
+                      <zipfileset dir="${recompress.folder}/core"
+                        prefix="${version.string}-CORE" />
+                    </zip>
+                    <zip destfile="${recompress.folder}/${portable.filename}-PLUS.zip"
+                      level="9">
+                      <zipfileset dir="${recompress.folder}/plus"
+                        prefix="${version.string}-PLUS" />
+                    </zip>
+                  </target>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -153,6 +207,7 @@
       <id>installer</id>
       <properties>
         <version.string>${artifactId}-${version.number}-r${version.revision}</version.string>
+        <installer.filename>${artifactId}-Installer-${version.number}-r${version.revision}</installer.filename>
       </properties>
       <build>
         <plugins>
@@ -185,19 +240,18 @@
                     <taskdef name="p200ant"
                       classname="de.matthiasmann.p200ant.P200AntTask"
                       classpath="launcher/p200ant.jar" />
-                    <fileset id="jars2pack"
-                      dir="${project.build.directory}/izpack/">
+                    <fileset id="jars2pack" dir="${project.build.directory}/izpack/">
                       <include name="**/*.jar" />
-                      <!-- exclude signed jars, circumvent security errors 
-                        e.g. "SecurityException: SHA1 digest error" -->
+                      <!-- exclude signed jars, circumvent security errors e.g. 
+                        "SecurityException: SHA1 digest error" -->
                       <exclude name="**/ermapper.jar" />
                     </fileset>
                     <p200ant repack="true">
                       <fileset refid="jars2pack" />
                     </p200ant>
                     <!-- prepare izpack environments -->
-                    <!-- jump through hoops to get special chars in readme 
-                      infopanel correct -->
+                    <!-- jump through hoops to get special chars in readme infopanel 
+                      correct -->
                     <copy file="${project.build.directory}/res/readme.txt"
                       tofile="${project.build.directory}/izpack/readme.text.html" />
                     <replace
@@ -216,8 +270,7 @@
                         <replacevalue>&amp;gt;</replacevalue>
                       </replacefilter>
                     </replace>
-                    <concat
-                      destfile="${project.build.directory}/izpack/readme.html"
+                    <concat destfile="${project.build.directory}/izpack/readme.html"
                       binary="yes">
                       <fileset file="etc/izpack/res/readme.html.head" />
                       <fileset
@@ -233,15 +286,13 @@
                     <copy todir="${project.build.directory}/izpack/core">
                       <fileset dir="etc/izpack" />
                     </copy>
-                    <copy file="etc/izpack/oj_installer.xml"
-                      todir="${project.build.directory}/izpack/core/"
+                    <copy file="etc/izpack/oj_installer.xml" todir="${project.build.directory}/izpack/core/"
                       filtering="true" overwrite="true" />
                     <filter token="edition" value="PLUS" />
                     <copy todir="${project.build.directory}/izpack/plus">
                       <fileset dir="etc/izpack" />
                     </copy>
-                    <copy file="etc/izpack/oj_installer.xml"
-                      todir="${project.build.directory}/izpack/plus/"
+                    <copy file="etc/izpack/oj_installer.xml" todir="${project.build.directory}/izpack/plus/"
                       filtering="true" overwrite="true" />
                     <!-- Allows us to use the IzPack Ant task -->
                     <taskdef name="IzPack"
@@ -251,31 +302,28 @@
                     <echo message="Make CORE installer" />
                     <IzPack
                       input="${project.build.directory}/izpack/core/oj_installer.xml"
-                      output="${project.build.directory}/izpack/Install_${version.string}-CORE.jar"
-                      installerType="standard"
-                      basedir="${project.build.directory}/izpack/core/"
+                      output="${project.build.directory}/izpack/${installer.filename}-CORE.jar"
+                      installerType="standard" basedir="${project.build.directory}/izpack/core/"
                       IzPackDir="launcher/IzPack-4.3.5" />
                     <echo message="Make PLUS installer" />
                     <IzPack
                       input="${project.build.directory}/izpack/plus/oj_installer.xml"
-                      output="${project.build.directory}/izpack/Install_${version.string}-PLUS.jar"
-                      installerType="standard"
-                      basedir="${project.build.directory}/izpack/plus/"
+                      output="${project.build.directory}/izpack/${installer.filename}-PLUS.jar"
+                      installerType="standard" basedir="${project.build.directory}/izpack/plus/"
                       IzPackDir="launcher/IzPack-4.3.5" />
                     <!-- generate exe launcher via launch4j -->
                     <!-- property name="launch4j.dir" location="launcher/launch4j-3.0.2" 
                       / -->
                     <property name="launch4j.config"
                       location="etc/launch4j/ojinstall-launch4j.xml" />
-                    <taskdef name="launch4j"
-                      classname="net.sf.launch4j.ant.Launch4jTask"
+                    <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
                       classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
                     <launch4j configFile="${launch4j.config}"
-                      jar="${project.build.directory}/izpack/Install_${version.string}-CORE.jar"
-                      outfile="${project.build.directory}/izpack/Install_${version.string}-CORE.exe" />
+                      jar="${project.build.directory}/izpack/${installer.filename}-CORE.jar"
+                      outfile="${project.build.directory}/izpack/${installer.filename}-CORE.exe" />
                     <launch4j configFile="${launch4j.config}"
-                      jar="${project.build.directory}/izpack/Install_${version.string}-PLUS.jar"
-                      outfile="${project.build.directory}/izpack/Install_${version.string}-PLUS.exe" />
+                      jar="${project.build.directory}/izpack/${installer.filename}-PLUS.jar"
+                      outfile="${project.build.directory}/izpack/${installer.filename}-PLUS.exe" />
                   </target>
                 </configuration>
                 <goals>
