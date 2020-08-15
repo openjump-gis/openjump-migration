@@ -1,7 +1,7 @@
 OpenJUMP (migration test)
 =========================
 
-***Disclaimer: this repository has only been created to test a possible migration of OpenJUMP (core) from [its current SVN repository](https://svn.code.sf.net/p/jump-pilot/code/) to Git, as well as a JTS 1.15+ update. If you're looking a stable version, the latest OpenJUMP release (1.15) can be downloaded [here](https://sourceforge.net/projects/jump-pilot/files/OpenJUMP/1.15/).***
+***Disclaimer: this repository has only been created to test a possible migration of OpenJUMP (core) from [its current SVN repository](https://svn.code.sf.net/p/jump-pilot/code/) to Git, as well as a JTS 1.15+ update. If you're looking for a stable version, the latest OpenJUMP release (1.15) can be downloaded [here](https://sourceforge.net/projects/jump-pilot/files/OpenJUMP/1.15/).***
 
 OpenJUMP is a community driven fork of JUMP the "Java Unified Mapping Platform" GIS software. The original JUMP was developed by Vivid Solutions, released under GPL2 in 2003 and discontinued in 2006.
 
