@@ -59,7 +59,7 @@ import com.vividsolutions.jump.workbench.ui.Viewport;
 import com.vividsolutions.jump.workbench.ui.WorkbenchFrame;
 import com.vividsolutions.jump.workbench.ui.images.IconLoader;
 
-import de.latlon.deejump.wfs.jump.WFSLayer;
+//import de.latlon.deejump.wfs.jump.WFSLayer;
 
 public class CropWarpPlugIn extends ThreadedBasePlugIn {
 
@@ -282,9 +282,9 @@ public class CropWarpPlugIn extends ThreadedBasePlugIn {
                     .getSelectedItem();
             if (slayer instanceof WMSLayer) {
                 envWanted.expandToInclude(((WMSLayer) slayer).getEnvelope());
-            } else if (slayer instanceof WFSLayer) {
-                envWanted.expandToInclude(((WFSLayer) slayer)
-                        .getFeatureCollectionWrapper().getEnvelope());
+//            } else if (slayer instanceof WFSLayer) {
+//                envWanted.expandToInclude(((WFSLayer) slayer)
+//                        .getFeatureCollectionWrapper().getEnvelope());
             } else if (slayer instanceof Layer) {
                 envWanted.expandToInclude(((Layer) slayer)
                         .getFeatureCollectionWrapper().getEnvelope());

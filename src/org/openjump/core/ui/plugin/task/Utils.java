@@ -42,7 +42,7 @@ import com.vividsolutions.jump.workbench.model.WMSLayer;
 import com.vividsolutions.jump.workbench.plugin.PlugInContext;
 import com.vividsolutions.jump.workbench.plugin.PlugInManager;
 
-import de.latlon.deejump.wfs.jump.WFSLayer;
+//import de.latlon.deejump.wfs.jump.WFSLayer;
 
 public class Utils {
 
@@ -101,9 +101,9 @@ public class Utils {
         if (sclass.equals("WMSLayer")) {
             WMSLayer wlyr = (WMSLayer) layer;
             name = StringUtils.remove(wlyr.getSRS(), "EPSG:");
-        } else if (sclass.equals("WFSLayer")) {
-            WFSLayer wlyr = (WFSLayer) layer;
-            name = wlyr.getCrs();
+//        } else if (sclass.equals("WFSLayer")) {
+//            WFSLayer wlyr = (WFSLayer) layer;
+//            name = wlyr.getCrs();
         } else if (sclass.equals("RasterImageLayer")) {
             RasterImageLayer wlyr = (RasterImageLayer) layer;
             try {
@@ -296,10 +296,10 @@ public class Utils {
             } else {
                 name = rlay.getName();
             }
-        } else if (sclass.equals("WFSLayer")) {
-            WFSLayer wlyr = (WFSLayer) layer;
-            name = wlyr.getName();
-
+//        } else if (sclass.equals("WFSLayer")) {
+//            WFSLayer wlyr = (WFSLayer) layer;
+//            name = wlyr.getName();
+//
         } else if (sclass.equals("WMSLayer")) {
             WMSLayer wlyr = (WMSLayer) layer;
             name = wlyr.getName();
@@ -326,14 +326,15 @@ public class Utils {
     public static String getLayerablePath(Layerable layer) {
         String path = "";
         String sclass = layer.getClass().getSimpleName();
-        if (sclass.equals("WFSLayer")) {
-            try {
-                WFSLayer lay = (WFSLayer) layer;
-                path = lay.getServerURL();
-            } catch (Exception ex) {
-                path = "";
-            }
-        } else if (sclass.equals("WMSLayer")) {
+//        if (sclass.equals("WFSLayer")) {
+//            try {
+//                WFSLayer lay = (WFSLayer) layer;
+//                path = lay.getServerURL();
+//            } catch (Exception ex) {
+//                path = "";
+//            }
+//        } else if (sclass.equals("WMSLayer")) {
+        if (sclass.equals("WMSLayer")) {
             try {
                 WMSLayer lay = (WMSLayer) layer;
                 path = lay.getServerURL();
