@@ -73,7 +73,7 @@ import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.Imaging;
 import org.openjump.util.UriUtil;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import com.vividsolutions.jump.io.CompressedFile;
 import com.vividsolutions.jump.workbench.imagery.ReferencedImageException;
 

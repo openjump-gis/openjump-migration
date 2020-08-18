@@ -21,26 +21,26 @@
 
 package com.vividsolutions.jump.geom;
 
-import com.vividsolutions.jts.algorithm.RayCrossingCounter;
-import com.vividsolutions.jts.algorithm.RobustLineIntersector;
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.geom.impl.CoordinateArraySequenceFactory;
-import com.vividsolutions.jts.geom.impl.PackedCoordinateSequenceFactory;
-import com.vividsolutions.jts.geom.util.LineStringExtracter;
-import com.vividsolutions.jts.geom.util.PointExtracter;
-import com.vividsolutions.jts.geom.util.PolygonExtracter;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-import com.vividsolutions.jts.noding.IntersectionAdder;
-import com.vividsolutions.jts.noding.MCIndexNoder;
-import com.vividsolutions.jts.noding.NodedSegmentString;
-import com.vividsolutions.jts.operation.linemerge.LineMerger;
-import com.vividsolutions.jts.operation.polygonize.Polygonizer;
-import com.vividsolutions.jts.operation.union.UnaryUnionOp;
+import org.locationtech.jts.algorithm.RayCrossingCounter;
+import org.locationtech.jts.algorithm.RobustLineIntersector;
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.impl.CoordinateArraySequenceFactory;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
+import org.locationtech.jts.geom.util.LineStringExtracter;
+import org.locationtech.jts.geom.util.PointExtracter;
+import org.locationtech.jts.geom.util.PolygonExtracter;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.noding.IntersectionAdder;
+import org.locationtech.jts.noding.MCIndexNoder;
+import org.locationtech.jts.noding.NodedSegmentString;
+import org.locationtech.jts.operation.linemerge.LineMerger;
+import org.locationtech.jts.operation.polygonize.Polygonizer;
+import org.locationtech.jts.operation.union.UnaryUnionOp;
 
 import java.util.*;
 
-import static com.vividsolutions.jts.geom.impl.PackedCoordinateSequenceFactory.*;
+import static org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory.*;
 
 /**
  * Operator to make a geometry valid.
@@ -194,13 +194,20 @@ public class MakeValidOp {
         } else {
             CoordinateSequenceFactory csFactory = geometry.getFactory().getCoordinateSequenceFactory();
             // Preserve 4th coordinate dimension as much as possible if preserveCoordDim is true
-            if (preserveCoordDim && csFactory instanceof PackedCoordinateSequenceFactory
-                    && ((PackedCoordinateSequenceFactory)csFactory).getDimension() == 4) {
-                Map<Coordinate,Double> map = new HashMap<>();
-                gatherDim4(geometry, map);
-                list2 = restoreDim4(list2, map);
+            // if (preserveCoordDim && csFactory instanceof PackedCoordinateSequenceFactory
+            //         && ((PackedCoordinateSequenceFactory)csFactory).getDimension() == 4) {
+            // CHECK: PackedCoordinateSequenceFactory (dimension related)
+            if (preserveCoordDim && csFactory instanceof PackedCoordinateSequenceFactory) {
+            	int dimension = getGeometryDimension(geometry);
+            	
+                if (dimension == 4) {
+                    Map<Coordinate,Double> map = new HashMap<>();
+                    gatherDim4(geometry, map);
+                    list2 = restoreDim4(list2, map);                	
+                }
             }
 
+            
             Geometry result = geometry.getFactory().buildGeometry(list2);
             // If input geometry was a GeometryCollection and result is a simple geometry
             // create a multi-geometry made of a single component
@@ -218,8 +225,61 @@ public class MakeValidOp {
             return result;
         }
     }
+    
+    
+    /**
+     * Return the dimension of a polygon (based on the coordinates).
+     * 
+     * TO CHECK: PackedCoordinateSequenceFactory (dimension related)
+     * 
+     * @param polygon
+     * @return the polygon dimension
+     */
+    private int getPolygonDimension(Polygon polygon) {
+    	int dimension = polygon.getExteriorRing().getCoordinateSequence().getDimension();
+    	int dimInt = 0;
+        for (int i = 0 ; i < polygon.getNumInteriorRing() ; i++) {
+        	int temp = polygon.getInteriorRingN(i).getCoordinateSequence().getDimension();
+        	if (temp > dimInt) {
+        		dimInt = temp;
+        	}
+        }
+    	return Math.max(dimension, dimInt);
+    }
 
-    // Reursively remove geometries with a dimension less than dimension parameter
+    
+    /**
+     * Return the dimension of a geometry (based on the coordinates).
+     * 
+     * TO CHECK: PackedCoordinateSequenceFactory (dimension related)
+     * 
+     * @param geometry
+     * @return the geometry dimension
+     */
+    private int getGeometryDimension(Geometry geometry) {
+    	int dimension = 0;
+        if (geometry instanceof Point) {
+        	dimension = ((Point)geometry).getCoordinateSequence().getDimension();
+        } else if (geometry instanceof LinearRing) {
+        	dimension = ((LinearRing)geometry).getCoordinateSequence().getDimension();
+        } else if (geometry instanceof LineString) { 
+        	dimension = ((LineString)geometry).getCoordinateSequence().getDimension();
+        } else if (geometry instanceof Polygon) {
+        	dimension = getPolygonDimension((Polygon)geometry);
+        } else {
+        	for (int i = 0 ; i < geometry.getNumGeometries(); i++) {
+        		int temp = getGeometryDimension(geometry.getGeometryN(i));
+            	if (temp > dimension) {
+            		dimension = temp;
+            	}
+        	}
+        }
+        return dimension;
+    }
+
+    
+
+    // Recursively remove geometries with a dimension less than dimension parameter
     private void removeLowerDimension(Geometry geometry, List<Geometry> result, int dimension) {
         for (int i = 0 ; i < geometry.getNumGeometries() ; i++) {
             Geometry g = geometry.getGeometryN(i);
@@ -491,7 +551,7 @@ public class MakeValidOp {
             polygonizer.add(lines);
 
             // Computes intersections to determine the status of each polygon
-            Collection<Geometry> geoms = new ArrayList();
+            Collection<Geometry> geoms = new ArrayList<Geometry>();
             for (Object object : polygonizer.getPolygons()) {
                 Polygon polygon = (Polygon)object;
                 Coordinate p = polygon.getInteriorPoint().getCoordinate();
@@ -525,8 +585,10 @@ public class MakeValidOp {
 
     // Use ring to restore M values on geoms
     private Collection<Geometry> restoreDim4(Collection<Geometry> geoms, Map<Coordinate,Double> map) {
+    	
         GeometryFactory factory = new GeometryFactory(
-                new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE, 4));
+                // new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE, 4));
+                new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE));
         Collection<Geometry> result = new ArrayList<>();
         for (Geometry geom : geoms) {
             if (geom instanceof Point) {
@@ -587,7 +649,9 @@ public class MakeValidOp {
 
     // Use map to restore M values on the coordinate array
     private CoordinateSequence restoreDim4(CoordinateSequence cs, Map<Coordinate,Double> map) {
-        CoordinateSequence seq = new PackedCoordinateSequenceFactory(DOUBLE, 4).create(cs.size(), 4);
+    	// CHECK: PackedCoordinateSequenceFactory (dimension related)
+        // CoordinateSequence seq = new PackedCoordinateSequenceFactory(DOUBLE, 4).create(cs.size(), 4);
+        CoordinateSequence seq = new PackedCoordinateSequenceFactory(DOUBLE).create(cs.size(), 4);
         for (int i = 0 ; i < cs.size() ; i++) {
             seq.setOrdinate(i,0,cs.getOrdinate(i,0));
             seq.setOrdinate(i,1,cs.getOrdinate(i,1));
@@ -600,7 +664,7 @@ public class MakeValidOp {
 
     /**
      * Nodes a LineString and returns a List of Noded LineString's.
-     * Used to repare auto-intersecting LineString and Polygons.
+     * Used to repair auto-intersecting LineString and Polygons.
      * This method cannot process CoordinateSequence. The noding process is limited
      * to 3d geometries.<br/>
      * Preserves duplicate coordinates.
@@ -641,8 +705,10 @@ public class MakeValidOp {
 
 
     public static void main(String[] args) throws ParseException {
+    	// CHECK: PackedCoordinateSequenceFactory (dimension related)
         GeometryFactory factory3 = new GeometryFactory(CoordinateArraySequenceFactory.instance());
-        GeometryFactory factory4 = new GeometryFactory(new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE,4));
+        // GeometryFactory factory4 = new GeometryFactory(new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE,4));        
+        GeometryFactory factory4 = new GeometryFactory(new PackedCoordinateSequenceFactory(PackedCoordinateSequenceFactory.DOUBLE));
         WKTReader reader;
         MakeValidOp op = new MakeValidOp();
         MakeValidOp opGeomDimNotPreserved = new MakeValidOp().setPreserveGeomDim(false);
@@ -738,7 +804,9 @@ public class MakeValidOp {
         assert result.getNumPoints() == 4;
 
         cs1 = DOUBLE_FACTORY.create(new double[]{0,0,2,3, 10,0,4,5, 20,0,6,7}, 4);
-        input = new GeometryFactory(new PackedCoordinateSequenceFactory(DOUBLE, 4)).createLineString(cs1);
+        // CHECK: PackedCoordinateSequenceFactory (dimension related)
+        // input = new GeometryFactory(new PackedCoordinateSequenceFactory(DOUBLE, 4)).createLineString(cs1);
+        input = new GeometryFactory(new PackedCoordinateSequenceFactory(DOUBLE)).createLineString(cs1);
         // preserve 4th coordinate dimension
         result = op.makeValid(input);
         assert ((LineString)result).getCoordinateSequence().getOrdinate(1,3) == 5;

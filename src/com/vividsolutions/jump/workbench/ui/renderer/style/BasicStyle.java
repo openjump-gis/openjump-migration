@@ -40,8 +40,8 @@ import java.util.List;
 
 import org.openjump.util.SLDImporter.StrokeFillStyle;
 
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.util.Assert;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.util.Assert;
 import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.util.StringUtil;

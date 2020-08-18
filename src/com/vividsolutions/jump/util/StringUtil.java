@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.vividsolutions.jts.util.Assert;
+import org.locationtech.jts.util.Assert;
 
 /**
  * Useful String-related utilities.

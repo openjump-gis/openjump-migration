@@ -22,7 +22,7 @@ import org.openjump.core.ui.plugin.layer.pirolraster.panel.RasterColorEditorPane
 import org.openjump.core.ui.plugin.layer.pirolraster.panel.RasterScaleStylePanel;
 import org.openjump.core.ui.plugin.layer.pirolraster.panel.RasterTransparencyPanel;
 
-import com.vividsolutions.jts.util.Assert;
+import org.locationtech.jts.util.Assert;
 import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.workbench.WorkbenchContext;
 import com.vividsolutions.jump.workbench.plugin.AbstractPlugIn;

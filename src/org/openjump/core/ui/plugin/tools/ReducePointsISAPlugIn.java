@@ -38,16 +38,18 @@ import java.util.Iterator;
 
 import org.openjump.core.geomutils.GeoUtils;
 
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.DefaultCoordinateSequenceFactory;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.CoordinateSequence;
+//import org.locationtech.jts.geom.DefaultCoordinateSequenceFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
+
 import com.vividsolutions.jump.I18N;
 import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.workbench.WorkbenchContext;
@@ -224,14 +226,17 @@ public class ReducePointsISAPlugIn extends AbstractPlugIn {
            MultiPolygon mp = (MultiPolygon) geometry;
            Polygon[] polys = new Polygon[mp.getNumGeometries()];
            GeometryFactory geoFac = geometry.getFactory();
-           DefaultCoordinateSequenceFactory dcsf = DefaultCoordinateSequenceFactory.instance();
+//           DefaultCoordinateSequenceFactory dcsf = DefaultCoordinateSequenceFactory.instance();
+//           CoordinateSequenceFactory csf = 
+           PackedCoordinateSequenceFactory pcsf = new PackedCoordinateSequenceFactory();
            
            if (!mp.isEmpty())
            {
                for (int i = 0; i < mp.getNumGeometries(); i++)
                {
                    Polygon poly = (Polygon) GeoUtils.reducePoints(mp.getGeometryN(i), tolerance);
-                   CoordinateSequence cs = dcsf.create(poly.getCoordinates());
+//                   CoordinateSequence cs = dcsf.create(poly.getCoordinates());
+                   CoordinateSequence cs = pcsf.create(poly.getCoordinates());                   
                    polys[i] = new Polygon(new LinearRing(cs, geoFac), null, geoFac);
                }
                return new MultiPolygon(polys, geoFac);

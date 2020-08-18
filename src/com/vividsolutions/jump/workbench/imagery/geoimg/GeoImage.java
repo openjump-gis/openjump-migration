@@ -45,7 +45,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import com.vividsolutions.jump.JUMPException;
 import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.workbench.imagery.ReferencedImage;

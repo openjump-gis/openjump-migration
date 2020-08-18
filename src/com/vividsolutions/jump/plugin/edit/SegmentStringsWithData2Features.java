@@ -31,10 +31,10 @@
  */
 package com.vividsolutions.jump.plugin.edit;
 
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.noding.*;
-import com.vividsolutions.jts.operation.linemerge.LineMerger;
-import com.vividsolutions.jts.operation.linemerge.LineSequencer;
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.noding.*;
+import org.locationtech.jts.operation.linemerge.LineMerger;
+import org.locationtech.jts.operation.linemerge.LineSequencer;
 import com.vividsolutions.jump.feature.Feature;
 import java.util.ArrayList;
 import java.util.Arrays;

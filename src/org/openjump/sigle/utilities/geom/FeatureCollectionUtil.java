@@ -10,7 +10,7 @@ package org.openjump.sigle.utilities.geom;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.vividsolutions.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryCollection;
 import com.vividsolutions.jump.feature.Feature;
 import com.vividsolutions.jump.feature.FeatureCollection;
 import com.vividsolutions.jump.feature.FeatureSchema;
